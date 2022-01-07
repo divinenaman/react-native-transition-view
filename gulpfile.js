@@ -3,10 +3,6 @@ const gulp = require('gulp');
 const concat = require('gulp-concat');
 const jeditor = require('gulp-json-editor');
 const bump = require('gulp-bump');
-const webpack_stream = require('webpack-stream');
-const webpaconfig = require('./webpack.config.js');
-const webpackDevConfig = require('./webpack.config.dev');
-const webpackProdConfig = require('./webpack.config.prod');
 const run = require('gulp-run');
 
 // dependencies for npm publishing

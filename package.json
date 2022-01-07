@@ -1,8 +1,8 @@
 {
   "name": "react-native-transition",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "Make Animated and Transitioned views using simplified components",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -11,16 +11,11 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "~44.0.0",
-    "expo-status-bar": "~1.2.0",
-    "react": "17.0.1",
-    "react-dom": "17.0.1",
-    "react-native": "0.64.3",
-    "react-native-reanimated": "~2.3.1",
-    "react-native-web": "0.17.1"
+    "react-native-reanimated": "~2.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "gulp": "^4.0.2",
     "gulp-bump": "^3.2.0",
     "gulp-concat": "^2.6.1",
     "gulp-json-editor": "^2.5.6",
@@ -31,7 +26,5 @@
     "react-native": ">=0.35"
   },
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
-  "contributors": [
-    "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"
-  ]
+  "contributors": ["Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"]
 }
