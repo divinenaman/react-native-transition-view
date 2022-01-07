@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-export function TransitionLayer({
+function TransitionLayer({
   layerNumber,
   switchLayerOnPress,
   onPress,
@@ -19,7 +19,7 @@ export function TransitionLayer({
   return <View style={[containerStyle]}>{children}</View>;
 }
 
-export default function TransitionComponent({
+function TransitionComponent({
   children,
   layers = 0,
   containerStyle = {},
@@ -154,11 +154,10 @@ export default function TransitionComponent({
   );
 }
 
-export function TransitionButton({
+function TransitionButton({
   children,
   bgColor = "black",
   color = "#fff",
-  type = "text",
 }) {
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
@@ -177,3 +176,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
 });
+
+export {
+  TransitionComponent,
+  TransitionLayer,
+  TransitionButton
+}

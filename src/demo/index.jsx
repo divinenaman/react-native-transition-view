@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import TransitionContainer, {
+import {
+  TransitionComponent as TransitionContainer,
   TransitionLayer,
   TransitionButton,
 } from "../components/TransitionComponent";
@@ -18,24 +19,12 @@ export default function Demo() {
             padding: 10,
           }}
         >
-          <Text>Welcome to Everyday Loan India</Text>
+          <Text style={{ fontSize: 32, fontWeight: "bold" }}>
+            Heading: MY APP
+          </Text>
           <View style={{ height: 20 }}></View>
 
-          <Text>Loan stuff made easy. {"\n"}Some catchy content.</Text>
-        </TransitionLayer>
-
-        <TransitionLayer
-          layerNumber={1}
-          switchLayerOnPress={0}
-          transitionType="fade"
-          containerWidth="20%"
-          containerStyle={{
-            justifyContent: "center",
-            padding: 10,
-            marginTop: 40,
-          }}
-        >
-          <TransitionButton bgColor="transparent" />
+          <Text style={{ fontSize: 18 }}>Subtitle, Some Stuff.</Text>
         </TransitionLayer>
 
         <TransitionLayer
@@ -43,13 +32,14 @@ export default function Demo() {
           transitionType="fade"
           containerWidth="80%"
           containerStyle={{
-            right: 0,
             justifyContent: "center",
             padding: 10,
             marginTop: 40,
           }}
         >
-          <Text>Let's sign you up</Text>
+          <Text style={{ fontSize: 32, fontWeight: "bold" }}>
+            Let's sign you up
+          </Text>
         </TransitionLayer>
 
         <TransitionLayer
@@ -62,8 +52,8 @@ export default function Demo() {
             padding: 10,
           }}
         >
-          <View style={{ paddingLeft: 12 }}>
-            <Text>Welcome!</Text>
+          <View style={{ justifyContent: "center", flexDirection: "row" }}>
+            <Text style={{ fontSize: 32, fontWeight: "bold" }}>Welcome!</Text>
           </View>
         </TransitionLayer>
 
@@ -89,33 +79,26 @@ export default function Demo() {
           containerStyle={{
             marginTop: 40,
             padding: 10,
-            right: 0,
-            height: "8%",
             justifyContent: "center",
           }}
         >
-          <Text textSize={"h1"} textWeight={"600"}>
-            Account Name
-          </Text>
+          <Text style={{ fontSize: 32, fontWeight: "bold" }}>Login</Text>
         </TransitionLayer>
 
         <TransitionLayer
           layerNumber={2}
           transitionType="fade"
           containerStyle={{
-            marginTop: 120,
+            marginTop: 50,
             height: "40%",
             justifyContent: "center",
             padding: 10,
           }}
         >
-          <View style={{ paddingLeft: 12 }}>
-            <Text textSize="p" textColor="black1" textWeight="300">
+          <View style={{ justifyContent: "center", flexDirection: "row" }}>
+            <Text style={{ fontSize: 32, fontWeight: "bold" }}>
               Welcome back
             </Text>
-          </View>
-          <View style={{ paddingLeft: 12 }}>
-            <Text>Enter One Time Password</Text>
           </View>
         </TransitionLayer>
 
@@ -143,12 +126,13 @@ export default function Demo() {
           layerNumber={1}
           switchLayerOnPress={0}
           containerStyle={{ bottom: 0 }}
+          onPress={() => console.log("Pressed Submit")}
         >
           <TransitionButton>{"Submit"}</TransitionButton>
         </TransitionLayer>
         <TransitionLayer
           layerNumber={2}
-          onPress={() => console.log("TabNav")}
+          onPress={() => console.log("Pressed Login")}
           containerStyle={{ right: 0, bottom: 0 }}
         >
           <TransitionButton>{"Login"}</TransitionButton>
