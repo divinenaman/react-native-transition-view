@@ -10,5 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 
+# generated files by bob
+lib/
+
 # macOS
 .DS_Store

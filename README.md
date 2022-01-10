@@ -1,7 +1,3 @@
-## Features
+# Transition View
 
-- delay
-- time control
-- chained async onPress
-- support buttons
-- test 
+Make performant animated transition layers using simplified components in React-Native. 

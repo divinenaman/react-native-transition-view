@@ -1,30 +1,41 @@
 {
-  "name": "react-native-transition",
-  "version": "1.4.4",
+  "name": "react-native-transition-view",
+  "version": "1.0.0",
   "description": "Make Animated and Transitioned views using simplified components",
-  "main": "index.js",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "react-native": "src/index.js",
+  "files": [
+    "lib/",
+    "src/"
+  ],
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      [
+        "commonjs",
+        {
+          "copyFlow": true
+        }
+      ],
+      "module"
+    ]
+  },
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "prepare": "bob build"
   },
   "dependencies": {
-    "react-native-reanimated": "~2.3.1"
+    "react-native-reanimated": ">=2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "gulp": "^4.0.2",
-    "gulp-bump": "^3.2.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-json-editor": "^2.5.6",
-    "gulp-run": "^1.7.1",
-    "webpack-stream": "^7.0.0"
+    "react-native-builder-bob": "^0.18.2"
   },
   "peerDependencies": {
     "react-native": ">=0.35"
   },
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
-  "contributors": ["Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"]
+  "contributors": [
+    "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"
+  ]
 }
