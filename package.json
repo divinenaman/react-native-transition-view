@@ -34,6 +34,7 @@
   "peerDependencies": {
     "react-native": ">=0.35"
   },
+  "repository": "https://github.com/divinenaman/react-native-transition",
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
   "contributors": [
     "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"
