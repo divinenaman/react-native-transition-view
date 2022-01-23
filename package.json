@@ -1,6 +1,6 @@
 {
   "name": "react-native-transition-view",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Make Animated and Transitioned views using simplified components",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
