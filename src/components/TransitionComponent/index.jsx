@@ -16,7 +16,15 @@ function TransitionLayer({
   return <View style={[containerStyle]}>{children}</View>;
 }
 
-function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
+function TransitionComponent({
+  children,
+  layers = 0,
+  containerStyle = {},
+  visibleWidthVelocity = 500,
+  hiddenWidthVelocity = 1000,
+  visibleZindexVelocity = 300,
+  hiddenZindexVelocity = 400,
+}) {
   const [currentLayer, setCurrentLayer] = useState(0);
   const [previousLayer, setPreviousLayer] = useState(null);
 
@@ -39,7 +47,6 @@ function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
         child.props.containerWidth || "100%"
       ).toString();
 
-
       function processWidth(containerWidth) {
         const containerWidthRaw = (containerWidth || "100%").toString();
 
@@ -57,11 +64,11 @@ function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
           unit = "px";
         }
 
-        return { containerWidthValue, unit }
+        return { containerWidthValue, unit };
       }
 
       function getAnimatedStyles({ containerWidth, transitionStyle }) {
-        const { containerWidthValue, unit } = processWidth(containerWidth)
+        const { containerWidthValue, unit } = processWidth(containerWidth);
         if (transitionStyle == "slide") {
           return useAnimatedStyle(() => {
             const animatedWidthValue = interpolate(
@@ -73,7 +80,7 @@ function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
             return {
               width: animatedWidthValue + unit,
               zIndex: animatedZIndexValues[layerNumber].value,
-              opacity: animatedZIndexValues[layerNumber].value * 100,
+              opacity: animatedZIndexValues[layerNumber].value * 100
             };
           });
         } else {
@@ -84,25 +91,25 @@ function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
               opacity: animatedZIndexValues[layerNumber].value,
             };
           });
-        } 
+        }
       }
 
-      const { containerWidthValue, unit } = processWidth(containerWidthRaw)
+      const { containerWidthValue, unit } = processWidth(containerWidthRaw);
 
       const containerAnimatedStyles = useAnimatedStyle(() => {
-          return {
-            width: containerWidthValue + unit,
-            zIndex: animatedZIndexValues[layerNumber].value,
-            opacity: animatedZIndexValues[layerNumber].value, 
-          };
-        });
+        return {
+          width: containerWidthValue + unit,
+          zIndex: animatedZIndexValues[layerNumber].value,
+          opacity: animatedZIndexValues[layerNumber].value,
+        };
+      });
 
       return (
         <Animated.View
           style={[
             { position: "absolute" },
             { ...child.props.containerStyle },
-            containerAnimatedStyles 
+            containerAnimatedStyles,
           ]}
         >
           {React.Children.map(child.props.children, (child, _) => {
@@ -121,10 +128,10 @@ function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
     if (checkIfLayerValid(previousLayer)) {
       if (currentLayer != previousLayer) {
         animatedZIndexValues[previousLayer].value = withTiming(0, {
-          duration: 400,
+          duration: hiddenZindexVelocity,
         });
         animatedWidthValues[previousLayer].value = withTiming(0, {
-          duration: 1000,
+          duration: hiddenWidthVelocity,
         });
       }
     }
@@ -132,10 +139,10 @@ function TransitionComponent({ children, layers = 0, containerStyle = {} }) {
     if (checkIfLayerValid(currentLayer)) {
       if (currentLayer != previousLayer) {
         animatedZIndexValues[currentLayer].value = withTiming(1, {
-          duration: 300,
+          duration: visibleZindexVelocity,
         });
         animatedWidthValues[currentLayer].value = withTiming(100, {
-          duration: 400,
+          duration: visibleWidthVelocity,
         });
       }
     }
