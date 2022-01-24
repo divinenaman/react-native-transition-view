@@ -20,10 +20,10 @@ function TransitionComponent({
   children,
   layers = 0,
   containerStyle = {},
-  visibleWidthVelocity = 500,
-  hiddenWidthVelocity = 1000,
-  visibleZindexVelocity = 300,
-  hiddenZindexVelocity = 400,
+  visibleWidthDuration = 500,
+  hiddenWidthDuration = 1000,
+  visibleZindexDuration = 300,
+  hiddenZindexDuration = 400,
 }) {
   const [currentLayer, setCurrentLayer] = useState(0);
   const [previousLayer, setPreviousLayer] = useState(null);
@@ -128,10 +128,10 @@ function TransitionComponent({
     if (checkIfLayerValid(previousLayer)) {
       if (currentLayer != previousLayer) {
         animatedZIndexValues[previousLayer].value = withTiming(0, {
-          duration: hiddenZindexVelocity,
+          duration: hiddenZindexDuration,
         });
         animatedWidthValues[previousLayer].value = withTiming(0, {
-          duration: hiddenWidthVelocity,
+          duration: hiddenWidthDuration,
         });
       }
     }
@@ -139,10 +139,10 @@ function TransitionComponent({
     if (checkIfLayerValid(currentLayer)) {
       if (currentLayer != previousLayer) {
         animatedZIndexValues[currentLayer].value = withTiming(1, {
-          duration: visibleZindexVelocity,
+          duration: visibleZindexDuration,
         });
         animatedWidthValues[currentLayer].value = withTiming(100, {
-          duration: visibleWidthVelocity,
+          duration: visibleWidthDuration,
         });
       }
     }
@@ -153,6 +153,13 @@ function TransitionComponent({
   return (
     <Animated.View style={containerStyle}>{preprocessChildren()}</Animated.View>
   );
+}
+
+function TransitionElement({
+  children,
+  containerStyle
+}) {
+  return <Animated.View style={[containerStyle]}>{children}</Animated.View>;
 }
 
 function TransitionButton({ children, bgColor = "black", color = "#fff" }) {
@@ -174,4 +181,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { TransitionComponent, TransitionLayer, TransitionButton };
+export { TransitionComponent, TransitionLayer, TransitionElement, TransitionButton };
