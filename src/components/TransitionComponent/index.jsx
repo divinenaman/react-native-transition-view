@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Pressable, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -9,9 +9,6 @@ import Animated, {
 
 function TransitionLayer({
   layerNumber,
-  switchLayerOnPress,
-  onPress,
-  transitionType,
   containerWidth,
   containerStyle = {},
   children,
@@ -23,6 +20,10 @@ function TransitionComponent({
   children,
   layers = 0,
   containerStyle = {},
+  visibleWidthDuration = 500,
+  hiddenWidthDuration = 1000,
+  visibleZindexDuration = 300,
+  hiddenZindexDuration = 400,
 }) {
   const [currentLayer, setCurrentLayer] = useState(0);
   const [previousLayer, setPreviousLayer] = useState(null);
@@ -41,83 +42,83 @@ function TransitionComponent({
 
   const preprocessChildren = () => {
     return React.Children.map(children, (child, _) => {
-      const transitionType = child.props.transitionType || "slide";
       const layerNumber = parseInt(child.props?.layerNumber || 0);
-      const switchLayerOnPress = parseInt(child.props?.switchLayerOnPress || 0);
-      const onPress = child.props?.onPress;
-
       const containerWidthRaw = (
-        child.props?.containerWidth || "100%"
+        child.props.containerWidth || "100%"
       ).toString();
 
-      let unit = "%";
-      let containerWidthValue = 100;
+      function processWidth(containerWidth) {
+        const containerWidthRaw = (containerWidth || "100%").toString();
 
-      if (containerWidthRaw.endsWith("%")) {
-        containerWidthValue = parseFloat(
-          containerWidthRaw.slice(0, containerWidthRaw.length - 1)
-        );
-      } else if (containerWidthRaw.endsWith("px")) {
-        containerWidthValue = parseFloat(
-          containerWidthRaw.slice(0, containerWidthRaw.length - 2)
-        );
-        unit = "px";
-      }
+        let unit = "%";
+        let containerWidthValue = 100;
 
-      let onPressHandler = null;
-      if (onPress != null || checkIfLayerValid(switchLayerOnPress)) {
-        onPressHandler = () => {
-          if (switchLayerOnPress != layerNumber) {
-            setCurrentLayer(switchLayerOnPress);
-          }
-
-          if (onPress) {
-            onPress();
-          }
-        };
-      }
-
-      let animatedStyle = {};
-
-      if (transitionType == "slide") {
-        animatedStyle = useAnimatedStyle(() => {
-          const animatedWidthValue = interpolate(
-            animatedWidthValues[layerNumber].value,
-            [0, 100],
-            [0, containerWidthValue]
+        if (containerWidthRaw.endsWith("%")) {
+          containerWidthValue = parseFloat(
+            containerWidthRaw.slice(0, containerWidthRaw.length - 1)
           );
+        } else if (containerWidthRaw.endsWith("px")) {
+          containerWidthValue = parseFloat(
+            containerWidthRaw.slice(0, containerWidthRaw.length - 2)
+          );
+          unit = "px";
+        }
 
-          return {
-            width: animatedWidthValue + unit,
-            zIndex: animatedZIndexValues[layerNumber].value,
-            opacity: animatedZIndexValues[layerNumber].value * 100,
-          };
-        });
-      } else {
-        animatedStyle = useAnimatedStyle(() => {
-          return {
-            width: containerWidthValue + unit,
-            zIndex: animatedZIndexValues[layerNumber].value,
-            opacity: animatedZIndexValues[layerNumber].value,
-          };
-        });
+        return { containerWidthValue, unit };
       }
+
+      function getAnimatedStyles({ containerWidth, transitionStyle }) {
+        const { containerWidthValue, unit } = processWidth(containerWidth);
+        if (transitionStyle == "slide") {
+          return useAnimatedStyle(() => {
+            const animatedWidthValue = interpolate(
+              animatedWidthValues[layerNumber].value,
+              [0, 100],
+              [0, containerWidthValue]
+            );
+
+            return {
+              width: animatedWidthValue + unit,
+              zIndex: animatedZIndexValues[layerNumber].value,
+              opacity: animatedZIndexValues[layerNumber].value * 100
+            };
+          });
+        } else {
+          return useAnimatedStyle(() => {
+            return {
+              width: containerWidthValue + unit,
+              zIndex: animatedZIndexValues[layerNumber].value,
+              opacity: animatedZIndexValues[layerNumber].value,
+            };
+          });
+        }
+      }
+
+      const { containerWidthValue, unit } = processWidth(containerWidthRaw);
+
+      const containerAnimatedStyles = useAnimatedStyle(() => {
+        return {
+          width: containerWidthValue + unit,
+          zIndex: animatedZIndexValues[layerNumber].value,
+          opacity: animatedZIndexValues[layerNumber].value,
+        };
+      });
 
       return (
         <Animated.View
           style={[
             { position: "absolute" },
             { ...child.props.containerStyle },
-            animatedStyle,
+            containerAnimatedStyles,
           ]}
         >
-          {onPressHandler ? (
-            <Pressable onPress={onPressHandler}>
-              {child.props.children}
-            </Pressable>
-          ) : (
-            child.props.children
-          )}
+          {React.Children.map(child.props.children, (child, _) => {
+            return React.cloneElement(child, {
+              ...child.props,
+              setVisibleLayer: setCurrentLayer,
+              getAnimatedStyles,
+            });
+          })}
         </Animated.View>
       );
     });
@@ -127,10 +128,10 @@ function TransitionComponent({
     if (checkIfLayerValid(previousLayer)) {
       if (currentLayer != previousLayer) {
         animatedZIndexValues[previousLayer].value = withTiming(0, {
-          duration: 400,
+          duration: hiddenZindexDuration,
         });
         animatedWidthValues[previousLayer].value = withTiming(0, {
-          duration: 1000,
+          duration: hiddenWidthDuration,
         });
       }
     }
@@ -138,10 +139,10 @@ function TransitionComponent({
     if (checkIfLayerValid(currentLayer)) {
       if (currentLayer != previousLayer) {
         animatedZIndexValues[currentLayer].value = withTiming(1, {
-          duration: 300,
+          duration: visibleZindexDuration,
         });
         animatedWidthValues[currentLayer].value = withTiming(100, {
-          duration: 400,
+          duration: visibleWidthDuration,
         });
       }
     }
@@ -154,11 +155,14 @@ function TransitionComponent({
   );
 }
 
-function TransitionButton({
+function TransitionElement({
   children,
-  bgColor = "black",
-  color = "#fff",
+  containerStyle
 }) {
+  return <Animated.View style={[containerStyle]}>{children}</Animated.View>;
+}
+
+function TransitionButton({ children, bgColor = "black", color = "#fff" }) {
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
       <Text style={{ color, paddingVertical: 15 }}>{children}</Text>
@@ -177,8 +181,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export {
-  TransitionComponent,
-  TransitionLayer,
-  TransitionButton
-}
+export { TransitionComponent, TransitionLayer, TransitionElement, TransitionButton };
