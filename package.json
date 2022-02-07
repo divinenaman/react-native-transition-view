@@ -9,6 +9,19 @@
     "lib/",
     "src/"
   ],
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ],
+    "branches": [
+      "master",
+      "main"
+    ]
+  },
   "react-native-builder-bob": {
     "source": "src",
     "output": "lib",
@@ -28,18 +41,17 @@
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^9.0.0",
     "husky": "^7.0.4",
-    "react-native-builder-bob": "^0.18.2"
+    "react-native-builder-bob": "^0.18.2",
+    "semantic-release": "^19.0.2"
   },
   "peerDependencies": {
     "react-native": "*"
   },
   "repository": "https://github.com/divinenaman/react-native-transition",
-  
-  "release": {
-    "branches": ["master", "main"]
-  },
-
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
   "contributors": [
     "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"
