@@ -14,10 +14,7 @@
     "output": "lib",
     "targets": [
       [
-        "commonjs",
-        {
-          "copyFlow": true
-        }
+        "commonjs"
       ],
       "module"
     ]
