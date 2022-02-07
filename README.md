@@ -35,12 +35,10 @@ Make performant animated transition layers using simplified components in React-
 
 - TransitionLayer
     - layerNumber: specify the layer number, values range from 0 to layers-1 
-    - switchLayerOnPress: specify the layer number to switch to on press, values range from 0 to layers-1
     - tansitionType: "fade" | "slide"
     - containerWidth: default equals to 100% relative to TransitionContainer width, values allowed in percent (%) and pixels (px)
     - containerStyle: styles to apply to container
-    - onPress: specify function to execute on press
-
+    
 - TransitionButton
     - bgColor: background color
     - color: text color
