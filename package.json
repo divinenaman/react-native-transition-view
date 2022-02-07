@@ -26,7 +26,7 @@
     "prepare": "bob build"
   },
   "dependencies": {
-    "react-native-reanimated": ">=2.0"
+    "react-native-reanimated": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
@@ -35,7 +35,7 @@
     "react-native-builder-bob": "^0.18.2"
   },
   "peerDependencies": {
-    "react-native": ">=0.35"
+    "react-native": "*"
   },
   "repository": "https://github.com/divinenaman/react-native-transition",
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
