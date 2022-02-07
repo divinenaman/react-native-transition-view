@@ -38,6 +38,11 @@
     "react-native": "*"
   },
   "repository": "https://github.com/divinenaman/react-native-transition",
+  
+  "release": {
+    "branches": ["master", "main"]
+  },
+
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
   "contributors": [
     "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"
