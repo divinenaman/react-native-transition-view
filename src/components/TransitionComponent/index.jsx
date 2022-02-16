@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import Animated, {
   interpolate,
@@ -25,19 +25,63 @@ function TransitionComponent({
   visibleZindexDuration = 300,
   hiddenZindexDuration = 400,
 }) {
-  const [currentLayer, setCurrentLayer] = useState(0);
-  const [previousLayer, setPreviousLayer] = useState(null);
+  const currentLayer = useRef(0);
+  const previousLayer = useRef(null);
 
-  const animatedWidthValues = Array(layers)
-    .fill(0)
-    .map((x) => useSharedValue(0));
+  const animatedWidthValues = useRef(
+    Array(layers)
+      .fill(0)
+      .map((x) => useSharedValue(0))
+  );
 
-  const animatedZIndexValues = Array(layers)
-    .fill(0)
-    .map((x) => useSharedValue(0));
+  const animatedZIndexValues = useRef(
+    Array(layers)
+      .fill(0)
+      .map((x) => useSharedValue(0))
+  );
 
   const checkIfLayerValid = (l) => {
     return l != null && l >= 0 && l < layers;
+  };
+
+  const setCurrentLayer = (transitionLayer) => {
+    currentLayer.current = transitionLayer;
+
+    if (checkIfLayerValid(previousLayer.current)) {
+      if (currentLayer.current != previousLayer.current) {
+        animatedZIndexValues.current[previousLayer.current].value = withTiming(
+          0,
+          {
+            duration: hiddenZindexDuration,
+          }
+        );
+        animatedWidthValues.current[previousLayer.current].value = withTiming(
+          0,
+          {
+            duration: hiddenWidthDuration,
+          }
+        );
+      }
+    }
+
+    if (checkIfLayerValid(currentLayer.current)) {
+      if (currentLayer.current != previousLayer.current) {
+        animatedZIndexValues.current[currentLayer.current].value = withTiming(
+          1,
+          {
+            duration: visibleZindexDuration,
+          }
+        );
+        animatedWidthValues.current[currentLayer.current].value = withTiming(
+          100,
+          {
+            duration: visibleWidthDuration,
+          }
+        );
+      }
+    }
+
+    previousLayer.current = currentLayer.current;
   };
 
   const preprocessChildren = () => {
@@ -72,23 +116,23 @@ function TransitionComponent({
         if (transitionStyle == "slide") {
           return useAnimatedStyle(() => {
             const animatedWidthValue = interpolate(
-              animatedWidthValues[layerNumber].value,
+              animatedWidthValues.current[layerNumber].value,
               [0, 100],
               [0, containerWidthValue]
             );
 
             return {
               width: animatedWidthValue + unit,
-              zIndex: animatedZIndexValues[layerNumber].value,
-              opacity: animatedZIndexValues[layerNumber].value * 100
+              zIndex: animatedZIndexValues.current[layerNumber].value,
+              opacity: animatedZIndexValues.current[layerNumber].value * 100,
             };
           });
         } else {
           return useAnimatedStyle(() => {
             return {
               width: containerWidthValue + unit,
-              zIndex: animatedZIndexValues[layerNumber].value,
-              opacity: animatedZIndexValues[layerNumber].value,
+              zIndex: animatedZIndexValues.current[layerNumber].value,
+              opacity: animatedZIndexValues.current[layerNumber].value,
             };
           });
         }
@@ -99,8 +143,8 @@ function TransitionComponent({
       const containerAnimatedStyles = useAnimatedStyle(() => {
         return {
           width: containerWidthValue + unit,
-          zIndex: animatedZIndexValues[layerNumber].value,
-          opacity: animatedZIndexValues[layerNumber].value,
+          zIndex: animatedZIndexValues.current[layerNumber].value,
+          opacity: animatedZIndexValues.current[layerNumber].value,
         };
       });
 
@@ -125,40 +169,15 @@ function TransitionComponent({
   };
 
   useEffect(() => {
-    if (checkIfLayerValid(previousLayer)) {
-      if (currentLayer != previousLayer) {
-        animatedZIndexValues[previousLayer].value = withTiming(0, {
-          duration: hiddenZindexDuration,
-        });
-        animatedWidthValues[previousLayer].value = withTiming(0, {
-          duration: hiddenWidthDuration,
-        });
-      }
-    }
-
-    if (checkIfLayerValid(currentLayer)) {
-      if (currentLayer != previousLayer) {
-        animatedZIndexValues[currentLayer].value = withTiming(1, {
-          duration: visibleZindexDuration,
-        });
-        animatedWidthValues[currentLayer].value = withTiming(100, {
-          duration: visibleWidthDuration,
-        });
-      }
-    }
-
-    setPreviousLayer(currentLayer);
-  }, [currentLayer]);
+    setCurrentLayer(0);
+  }, []);
 
   return (
     <Animated.View style={containerStyle}>{preprocessChildren()}</Animated.View>
   );
 }
 
-function TransitionElement({
-  children,
-  containerStyle
-}) {
+function TransitionElement({ children, containerStyle }) {
   return <Animated.View style={[containerStyle]}>{children}</Animated.View>;
 }
 
@@ -181,4 +200,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export { TransitionComponent, TransitionLayer, TransitionElement, TransitionButton };
+export {
+  TransitionComponent,
+  TransitionLayer,
+  TransitionElement,
+  TransitionButton,
+};
