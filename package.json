@@ -55,5 +55,16 @@
   "author": "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)",
   "contributors": [
     "Naman Agarwal <namanddev7@gmail.com> (https://github.com/divinenaman)"
+  ],
+  "keywords": [
+    "react-native",
+    "transition",
+    "navigation",
+    "animation",
+    "reanimated",
+    "fade",
+    "slide",
+    "layers",
+    "parallax"
   ]
 }
